@@ -8,6 +8,8 @@ services:
       POSTGRES_DB: techtrack
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - mynetwork
 
   backend:
     build: ./backend
@@ -24,6 +26,8 @@ services:
       - DB_NAME=techtrack
       - DB_USER=user
       - DB_PASSWORD=password
+    networks:
+      - mynetwork
 
   frontend:
     build: ./frontend
@@ -31,7 +35,20 @@ services:
       - "3000:3000"
     volumes:
       - ./frontend:/app
+    depends_on:
+      - db
+    environment:
+      - DATABASE_USER=user
+      - DATABASE_HOST=db
+      - DATABASE_NAME=techtrack
+      - DATABASE_PASSWORD=password
+      - DATABASE_PORT=5432
+    networks:
+      - mynetwork
 
 volumes:
   postgres_data:
+
+networks:
+  mynetwork:
 
