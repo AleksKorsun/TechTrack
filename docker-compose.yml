@@ -3,9 +3,9 @@ services:
   db:
     image: postgres:13
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: techtrack
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
@@ -13,7 +13,7 @@ services:
 
   backend:
     build: ./backend
-    command: python manage.py runserver 0.0.0.0:8000
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     volumes:
       - ./backend:/app
     ports:
@@ -23,26 +23,21 @@ services:
     environment:
       - DB_HOST=db
       - DB_PORT=5432
-      - DB_NAME=techtrack
-      - DB_USER=user
-      - DB_PASSWORD=password
+      - DB_NAME=${POSTGRES_DB}
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
     networks:
       - mynetwork
 
   frontend:
     build: ./frontend
-    ports:
-      - "3000:3000"
+    command: npm run dev
     volumes:
       - ./frontend:/app
+    ports:
+      - "3000:3000"
     depends_on:
-      - db
-    environment:
-      - DATABASE_USER=user
-      - DATABASE_HOST=db
-      - DATABASE_NAME=techtrack
-      - DATABASE_PASSWORD=password
-      - DATABASE_PORT=5432
+      - backend
     networks:
       - mynetwork
 
@@ -51,4 +46,6 @@ volumes:
 
 networks:
   mynetwork:
+
+
 

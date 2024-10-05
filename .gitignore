@@ -2,6 +2,18 @@
 __pycache__/
 *.py[cod]
 *$py.class
+# Python
+__pycache__/
+*.pyc
+
+# Node.js
+node_modules/
+
+# Environment variables
+.env
+
+# Docker
+*.log
 
 # C extensions
 *.so

@@ -1,4 +1,4 @@
-# backend/Dockerfile
+#backend/Dockerfile:
 FROM python:3.10
 
 # Устанавливаем рабочую директорию
@@ -11,9 +11,13 @@ COPY requirements.txt /app/
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-# Копируем всё остальное
+# Копируем остальной код
 COPY . /app/
 
-# Запуск сервера Django
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Открываем порт
+EXPOSE 8000
+
+# Запуск сервера FastAPI
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
 
