@@ -25,3 +25,25 @@ body {
     text-wrap: balance;
   }
 }
+/* Добавь эти стили в файл global.css или в tailwind.config.js */
+.sidebar {
+  background-color: #1e3a8a;
+  width: 250px;
+  min-height: 100vh;
+  padding: 10px;
+  transition: width 0.3s ease;
+}
+.active {
+  background-color: #254eda;
+}
+.kpi-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+.todo-container, .appointments-container {
+  background-color: white;
+  margin-bottom: 20px;
+  padding: 15px;
+  border-radius: 8px;
+}

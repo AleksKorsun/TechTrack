@@ -2,10 +2,8 @@ version: '3'
 services:
   db:
     image: postgres:13
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+    env_file:
+      - .env
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
@@ -20,12 +18,8 @@ services:
       - "8000:8000"
     depends_on:
       - db
-    environment:
-      - DB_HOST=db
-      - DB_PORT=5432
-      - DB_NAME=${POSTGRES_DB}
-      - DB_USER=${POSTGRES_USER}
-      - DB_PASSWORD=${POSTGRES_PASSWORD}
+    env_file:
+      - .env
     networks:
       - mynetwork
 
@@ -46,6 +40,7 @@ volumes:
 
 networks:
   mynetwork:
+
 
 
 
