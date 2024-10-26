@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Инвойс {{ invoice.id }}</title>
+  <style>
+    /* Ваши стили для PDF */
+  </style>
+</head>
+
+<body>
+  <h1>Инвойс №{{ invoice.id }}</h1>
+  <p>Клиент: {{ invoice.client.name }}</p>
+  <p>Сумма: {{ invoice.amount }}</p>
+  <!-- Добавьте остальные детали -->
+</body>
+
+</html>

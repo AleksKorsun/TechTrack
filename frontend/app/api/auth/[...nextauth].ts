@@ -1,4 +1,6 @@
 import NextAuth from 'next-auth';
+import { User, Session } from 'next-auth';
+import { JWT } from 'next-auth/jwt';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import axios from 'axios';
@@ -13,22 +15,27 @@ export default NextAuth({
       },
       async authorize(credentials) {
         try {
-          // Обрабатываем авторизацию через API
+          // Отправляем запрос на бэкенд для аутентификации
           const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
             email: credentials?.email,
             password: credentials?.password,
           });
 
-          // Проверяем успешный ответ от API
+          // Проверяем успешный ответ от бэкенда
           if (res.data && res.data.access_token) {
-            return { ...res.data }; // Возвращаем данные пользователя
+            // Возвращаем данные пользователя
+            return {
+              ...res.data.user, // email и role
+              accessToken: res.data.access_token,
+              refreshToken: res.data.refresh_token,
+            };
           }
 
           // Если неудача, возвращаем null
           return null;
-        } catch (error: any) {  // Приведение типа error к any
+        } catch (error: any) {
           console.error('Ошибка авторизации:', error.response?.data || error.message);
-          return null;
+          throw new Error(error.response?.data?.detail || 'Ошибка авторизации');
         }
       },
     }),
@@ -38,23 +45,35 @@ export default NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
-      // Добавляем access_token в токен, если он есть
+    async jwt({ token, user }: { token: JWT; user?: User }) {
       if (user) {
-        token.accessToken = (user as any).access_token;  // Приведение user к any
+        token.accessToken = user.accessToken;
+        token.refreshToken = user.refreshToken;
+        token.email = user.email;
+        token.role = user.role; // Сохраняем роль пользователя
       }
       return token;
     },
-    async session({ session, token }) {
-      // Добавляем access_token в сессию
-      session.accessToken = token.accessToken as string;  // Явное приведение к string
+    async session({ session, token }: { session: Session; token: JWT }) {
+      session.expires = session.expires ?? new Date(Date.now() + 60 * 60 * 1000).toISOString();
+      session.accessToken = token.accessToken ?? null;
+      session.refreshToken = token.refreshToken ?? null;
+      session.error = token.error ?? null;
+
+      if (session.user) {
+        session.user.email = token.email ?? null;
+        session.user.role = token.role ?? null;
+      }
       return session;
-    },
+    }
   },
   pages: {
-    signIn: '/auth/signin', // Пользовательская страница входа
-    error: '/auth/error', // Страница ошибки
+    signIn: '/authentication/login',
+    error: '/authentication/error',
   },
-  secret: process.env.NEXTAUTH_SECRET, // Секретный ключ для шифрования
+  secret: process.env.NEXTAUTH_SECRET,
 });
+
+
+
 

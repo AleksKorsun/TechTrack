@@ -3,20 +3,30 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, ListAlt, CalendarToday, Map, Group, Payment, Description, Report, Chat, CreditCard } from '@mui/icons-material';
+import {
+  Home as HomeIcon,
+  ListAlt,
+  CalendarToday,
+  Map as MapIcon,
+  Group,
+  Payment,
+  Description,
+  Report,
+  Chat,
+  CreditCard,
+  Menu as MenuIcon,
+} from '@mui/icons-material';
 
-// Типы для пропсов Sidebar
 interface SidebarProps {
   isOpen: boolean;
   toggleSidebar: () => void;
 }
 
-// Массив элементов меню с текстом и иконками
 const menuItems = [
-  { text: 'Home', href: '/home', icon: <Home /> },
+  { text: 'Home', href: '/home', icon: <HomeIcon /> },
   { text: 'Orders', href: '/orders', icon: <ListAlt /> },
   { text: 'Scheduler', href: '/schedule', icon: <CalendarToday /> },
-  { text: 'Map', href: '/map', icon: <Map /> },
+  { text: 'Map', href: '/map', icon: <MapIcon /> },
   { text: 'Clients', href: '/clients', icon: <Group /> },
   { text: 'Payments', href: '/payments', icon: <Payment /> },
   { text: 'Quotes', href: '/quotes', icon: <Description /> },
@@ -25,33 +35,48 @@ const menuItems = [
   { text: 'Chat', href: '/chat', icon: <Chat /> },
 ];
 
-const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
   const pathname = usePathname();
 
   return (
-    <div className={`fixed top-0 left-0 h-full bg-gradient-to-b from-gradientStart to-gradientEnd transition-all ${isOpen ? 'w-64' : 'w-16'}`}>
-      {/* Кнопка сворачивания панели */}
+    <div
+      className={`bg-gradient-to-b from-gradientStart to-gradientEnd transition-all duration-300 fixed top-0 left-0 h-full z-20 ${isOpen ? 'w-64' : 'w-16'
+        }`}
+    >
+      {/* Toggle Button */}
       <button
         onClick={toggleSidebar}
-        className="absolute top-2 right-[-15px] p-2 bg-gradientApple-light rounded-full"
+        className="absolute top-4 right-4 p-1 bg-white rounded-full z-30"
       >
-        {isOpen ? '←' : '→'}
+        <MenuIcon />
       </button>
 
-      {/* Список меню */}
-      <ul className="mt-16">
+      {/* Logo */}
+      <div className="flex items-center justify-center mt-16 mb-6">
+        {isOpen ? (
+          <h1 className="text-white text-xl font-bold">TechTrack</h1>
+        ) : (
+          <div className="w-8 h-8 bg-white rounded-full"></div>
+        )}
+      </div>
+
+      {/* Menu List */}
+      <ul className="flex flex-col space-y-2">
         {menuItems.map((item) => (
-          <li
-            key={item.href}
-            className={`p-4 flex items-center hover:bg-gradientApple-light transition-colors duration-200 rounded-md ${pathname === item.href ? 'bg-gradientApple-dark' : ''}`}
-          >
-            <span className="text-white mr-4">{item.icon}</span>
-            {/* Отображение текста только при развернутом меню */}
-            {isOpen && (
-              <Link href={item.href}>
-                {item.text}
-              </Link>
-            )}
+          <li key={item.href} className="px-4">
+            <Link href={item.href} legacyBehavior>
+              <a
+                className={`flex items-center p-2 rounded-md hover:bg-gradientApple-light transition-colors duration-200 ${pathname === item.href ? 'bg-gradientApple-dark' : ''
+                  }`}
+              >
+                <span className="text-white">{item.icon}</span>
+                {isOpen && (
+                  <span className="ml-4 text-white whitespace-nowrap overflow-hidden text-ellipsis">
+                    {item.text}
+                  </span>
+                )}
+              </a>
+            </Link>
           </li>
         ))}
       </ul>
@@ -60,6 +85,8 @@ const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
 };
 
 export default Sidebar;
+
+
 
 
 

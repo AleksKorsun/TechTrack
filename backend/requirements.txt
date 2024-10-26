@@ -28,5 +28,6 @@ SQLAlchemy==2.0.17
 sqlparse==0.5.1
 timezonefinder==6.5.2
 typing_extensions==4.12.2
-
+jose
+pydantic-settings
 

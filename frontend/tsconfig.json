@@ -6,43 +6,47 @@
       "esnext"
     ],
     "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
+    "skipLibCheck": true, // Это отключает проверку типов в библиотечных файлах, что полезно для ускорения компиляции
+    "strict": true, // Включает строгий режим TypeScript, который важен для минимизации ошибок
+    "noEmit": true, // Отключает эмиссию файлов, так как мы работаем с Next.js, и он сам компилирует файлы
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
+    "moduleResolution": "node", // Используем резолюцию модулей как в Node.js
+    "resolveJsonModule": true, // Позволяет импортировать JSON-файлы
+    "isolatedModules": true, // Обеспечивает совместимость с Next.js
+    "jsx": "preserve", // Поддержка JSX без трансформации
+    "incremental": true, // Включает инкрементальную компиляцию для ускорения
     "typeRoots": [
       "./types",
       "./node_modules/@types"
     ],
     "plugins": [
       {
-        "name": "next"
+        "name": "next" // Плагин для работы с Next.js
       }
     ],
-    "baseUrl": ".", // Устанавливаем базовую директорию
+    "baseUrl": ".", // Устанавливаем базовую директорию проекта
     "paths": {
       "@store/*": [
         "app/store/*"
-      ], // Абсолютные пути
+      ], // Абсолютные пути к файлам в store
       "@components/*": [
         "app/components/*"
-      ],
+      ], // Абсолютные пути к компонентам
       "@services/*": [
         "app/services/*"
-      ]
+      ], // Абсолютные пути к сервисам
+      "@providers/*": [
+        "app/providers/*"
+      ] // Если есть провайдеры, добавляем и их
     }
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
+    "types/**/*.d.ts",
+    ".next/types/**/*.ts" // Это путь для типов, которые автоматически генерирует Next.js
   ],
   "exclude": [
     "node_modules"

@@ -1,19 +1,23 @@
-import { configureStore } from '@reduxjs/toolkit';
-import ordersReducer from './ordersSlice'; // Импорт редюсера заказов
-import dashboardReducer from './dashboardSlice'; // Импорт редюсера для dashboard
+// store/store.ts
 
-// Создаем store с ordersReducer и dashboardReducer
+import { configureStore } from '@reduxjs/toolkit';
+import ordersReducer from './ordersSlice'; // Редьюсер для заказов
+import dashboardReducer from './dashboardSlice'; // Редьюсер для дашборда
+import eventsReducer from './eventsSlice'; // Редьюсер для событий
+import techniciansReducer from './techniciansSlice'; // Редьюсер для техников
+
 const store = configureStore({
   reducer: {
-    orders: ordersReducer,
-    dashboard: dashboardReducer, // Добавляем dashboard в редюсеры
+    orders: ordersReducer,       // Редьюсер для заказов
+    dashboard: dashboardReducer, // Редьюсер для дашборда
+    events: eventsReducer,       // Редьюсер для событий
+    technicians: techniciansReducer, // Редьюсер для техников
   },
 });
 
-// Экспортируем тип RootState, чтобы его можно было использовать для типизации useSelector
+export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
 
-// Экспортируем тип AppDispatch, чтобы его можно было использовать для типизации useDispatch
-export type AppDispatch = typeof store.dispatch;
-
 export default store;
+
+
