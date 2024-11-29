@@ -6,9 +6,12 @@ from app.schemas.user import UserCreate, UserOut, UserUpdate, UserRoleUpdate
 from app.models.user import User
 from app.dependencies import get_db, get_current_user, role_required
 from app.core.security import get_password_hash
+from app.core.security import create_access_token
 from typing import List
 from app.enums import UserRole
 import logging
+from fastapi import Response
+
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -92,15 +95,44 @@ async def delete_user(user_id: int, db: Session = Depends(get_db)):
 async def update_user_role(
     user_id: int,
     role_update: UserRoleUpdate,
+    response: Response,
     db: Session = Depends(get_db)
 ):
-    logger.info(f"Admin is attempting to update role for user with ID: {user_id} to {role_update.new_role}")
+    logger.info(f"Admin is attempting to update role for user with ID: {user_id} to {role_update.role}")
+
+    # Найти пользователя по ID
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         logger.warning(f"User with ID {user_id} not found")
         raise HTTPException(status_code=404, detail="Пользователь не найден")
-    user.role = role_update.new_role
+
+    # Проверка, не совпадает ли новая роль с текущей
+    if user.role == role_update.role:
+        logger.info(f"User with ID {user_id} already has the role {role_update.role}")
+        return {"message": f"Роль пользователя {user.email} уже равна {role_update.role}", "user": user}
+
+    # Обновить роль пользователя
+    old_role = user.role
+    user.role = role_update.role
     db.commit()
     db.refresh(user)
-    logger.info(f"Role for user with ID {user_id} successfully updated to {role_update.new_role}")
-    return user
+    logger.info(f"Role for user with ID {user_id} successfully updated from {old_role} to {role_update.role}")
+
+    # Создать новый токен с обновленной ролью
+    new_access_token = create_access_token({"sub": user.email, "role": user.role.value})
+    logger.info(f"New access token generated for user with ID {user_id}")
+
+    # Сохранить новый токен в куки
+    response.set_cookie(
+        key="access_token",
+        value=new_access_token,
+        httponly=True,
+        secure=True,
+        samesite="lax"
+    )
+    logger.info(f"Access token for user with ID {user_id} saved in cookies")
+
+    # Вернуть обновленную информацию о пользователе
+    return {"message": "Роль обновлена", "user": user}
+
+

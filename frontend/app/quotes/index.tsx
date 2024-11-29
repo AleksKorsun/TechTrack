@@ -1,4 +1,4 @@
-// pages/quotes/index.tsx
+// page/quotes/index.tsx
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';

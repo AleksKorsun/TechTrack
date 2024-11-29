@@ -1,11 +1,11 @@
 // store/dashboardSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import api from '../services/api';
+import apiClient from '../utils/apiClient';
 
 export const fetchDashboardData = createAsyncThunk(
   'dashboard/fetchData',
   async () => {
-    const response = await api.get('/dashboard');
+    const response = await apiClient.get('/dashboard');
     return response.data;
   }
 );
@@ -60,6 +60,7 @@ const dashboardSlice = createSlice({
 
 export const { setVirtualDashboardData } = dashboardSlice.actions;
 export default dashboardSlice.reducer;
+
 
 
 

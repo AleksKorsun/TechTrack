@@ -33,13 +33,13 @@ router = APIRouter(
 
 
 #1. GET /api/employees — Получить список сотрудников
-@router.get("/employees", response_model=List[UserOut], dependencies=[Depends(role_required([UserRole.admin, UserRole.finance]))])
+@router.get("/employees", response_model=List[UserOut], dependencies=[Depends(role_required([UserRole.admin, UserRole.marketer]))])
 async def get_employees(db: Session = Depends(get_db)):
     employees = db.query(User).filter(User.role == UserRole.technician).all()
     return employees
 
 #2. GET /api/reports/employee-performance — Производительность сотрудников
-@router.get("/employee-performance", response_model=List[EmployeePerformanceOut], dependencies=[Depends(role_required([UserRole.admin, UserRole.finance]))])
+@router.get("/employee-performance", response_model=List[EmployeePerformanceOut], dependencies=[Depends(role_required([UserRole.admin, UserRole.marketer]))])
 async def get_employee_performance(
     employee_id: int = None,
     start_date: datetime = None,
@@ -80,7 +80,7 @@ async def get_employee_performance(
     return performance_data
 
 # 3. GET /api/reports/financial — Финансовые отчёты
-@router.get("/financial", response_model=FinancialReportOut, dependencies=[Depends(role_required([UserRole.admin, UserRole.finance]))])
+@router.get("/financial", response_model=FinancialReportOut, dependencies=[Depends(role_required([UserRole.admin, UserRole.marketer]))])
 async def get_financial_reports(
     period: str = 'monthly',
     db: Session = Depends(get_db)
@@ -122,7 +122,7 @@ async def get_financial_reports(
     return financial_data
 
 #4. GET /api/reports/workload — Анализ загруженности
-@router.get("/workload", response_model=List[WorkloadReportOut], dependencies=[Depends(role_required([UserRole.admin, UserRole.finance]))])
+@router.get("/workload", response_model=List[WorkloadReportOut], dependencies=[Depends(role_required([UserRole.admin, UserRole.marketer]))])
 async def get_workload_analysis(
     start_date: datetime = None,
     end_date: datetime = None,
@@ -156,7 +156,7 @@ async def get_workload_analysis(
     return workload_data
 
 #5. GET /api/reports/clients — Отчётность по клиентам
-@router.get("/clients", response_model=List[ClientReportOut], dependencies=[Depends(role_required([UserRole.admin, UserRole.finance]))])
+@router.get("/clients", response_model=List[ClientReportOut], dependencies=[Depends(role_required([UserRole.admin, UserRole.marketer]))])
 async def get_client_reports(db: Session = Depends(get_db)):
     total_clients = db.query(func.count(Client.id)).scalar() or 0
 
@@ -176,7 +176,7 @@ async def get_client_reports(db: Session = Depends(get_db)):
     return client_data
 
 #6. GET /api/reports/orders — Отчёты по заказам
-@router.get("/orders", response_model=OrderReportOut, dependencies=[Depends(role_required([UserRole.admin, UserRole.finance]))])
+@router.get("/orders", response_model=OrderReportOut, dependencies=[Depends(role_required([UserRole.admin, UserRole.marketer]))])
 async def get_order_reports(db: Session = Depends(get_db)):
     completed = db.query(func.count(Order.id)).filter(Order.status == 'completed').scalar() or 0
     active = db.query(func.count(Order.id)).filter(Order.status == 'active').scalar() or 0
@@ -198,7 +198,7 @@ async def get_order_reports(db: Session = Depends(get_db)):
     return order_data
 
 #7. GET /api/reports/kpi — Аналитика и KPI
-@router.get("/kpi", response_model=KPIReportOut, dependencies=[Depends(role_required([UserRole.admin, UserRole.finance]))])
+@router.get("/kpi", response_model=KPIReportOut, dependencies=[Depends(role_required([UserRole.admin, UserRole.marketer]))])
 async def get_kpi(db: Session = Depends(get_db)):
     # Средний доход на сотрудника
     total_revenue = db.query(func.sum(Order.total_cost)).scalar() or 0.0

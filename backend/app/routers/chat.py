@@ -3,10 +3,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.dependencies import get_db, get_current_user, role_required
-from app.models.chat import Conversation, Message
 from app.schemas.chat import ConversationOut, MessageCreate, MessageOut
 from typing import List
 from datetime import datetime
+from app.models.conversation import Conversation
+from app.models.message import Message
+
 
 router = APIRouter(
     prefix="/conversations",

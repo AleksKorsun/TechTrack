@@ -15,7 +15,7 @@ class InvoiceItem(InvoiceItemBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class InvoiceBase(BaseModel):
     order_id: int
@@ -37,7 +37,7 @@ class Invoice(InvoiceBase):
     items: List[InvoiceItem]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Добавление InvoiceOut на основе Invoice
 class InvoiceOut(Invoice):

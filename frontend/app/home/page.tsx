@@ -3,7 +3,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import ProtectedRoute from '../components/ProtectedRoute';
+// Убираем ProtectedRoute для проверки отображения
 import KPIWidget from '../components/KPIWidget';
 import ToDoList from '../components/ToDoList';
 import AppointmentsList from '../components/AppointmentsList';
@@ -14,7 +14,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setVirtualDashboardData } from '../store/dashboardSlice';
 import type { AppDispatch, RootState } from '@store/store';
 
-// Chart.js Registration
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -41,7 +40,6 @@ const HomePage = () => {
     };
   };
 
-  // Создаем виртуальные данные для отображения на дашборде
   useEffect(() => {
     const virtualData = {
       newOrders: 15,
@@ -65,77 +63,71 @@ const HomePage = () => {
   }, [dispatch]);
 
   return (
-    <ProtectedRoute allowedRoles={['admin', 'dispatcher', 'technician', 'client']}>
-      <div className="flex min-h-screen">
-        <div className="flex flex-col flex-grow transition-all duration-300">
-          <main className="flex-grow p-4 mt-16 bg-gray-100 min-h-screen">
-            <h1 className="text-2xl font-bold mb-4 text-gray-800">Welcome to TechTrack</h1>
+    <div className="flex min-h-screen">
+      <div className="flex flex-col flex-grow transition-all duration-300">
+        <main className="flex-grow p-4 mt-16 bg-gray-100 min-h-screen">
+          <h1 className="text-2xl font-bold mb-4 text-gray-800">Welcome to TechTrack</h1>
 
-            {/* KPI Section */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-              <KPIWidget
-                title="New Orders"
-                value={data?.newOrders ?? 0}
-                icon={<AssignmentTurnedIn />}
-                color="bg-blue-500"
-                link="/orders"
-              />
-              <KPIWidget
-                title="Revenue"
-                value={data?.revenue ?? 0}
-                icon={<MonetizationOn />}
-                color="bg-green-500"
-                link="/revenue"
-              />
-              <KPIWidget
-                title="New Clients"
-                value={data?.newClients ?? 0}
-                icon={<People />}
-                color="bg-purple-500"
-                link="/clients"
-              />
-              <KPIWidget
-                title="Scheduled Appointments"
-                value={data?.appointments ?? 0}
-                icon={<Event />}
-                color="bg-yellow-500"
-                link="/appointments"
-              />
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <KPIWidget
+              title="New Orders"
+              value={data?.newOrders ?? 0}
+              icon={<AssignmentTurnedIn />}
+              color="bg-blue-500"
+              link="/orders"
+            />
+            <KPIWidget
+              title="Revenue"
+              value={data?.revenue ?? 0}
+              icon={<MonetizationOn />}
+              color="bg-green-500"
+              link="/revenue"
+            />
+            <KPIWidget
+              title="New Clients"
+              value={data?.newClients ?? 0}
+              icon={<People />}
+              color="bg-purple-500"
+              link="/clients"
+            />
+            <KPIWidget
+              title="Scheduled Appointments"
+              value={data?.appointments ?? 0}
+              icon={<Event />}
+              color="bg-yellow-500"
+              link="/appointments"
+            />
+          </div>
 
-            {/* To-Do List Section */}
-            <div className="mb-8">
-              <ToDoList />
-            </div>
+          <div className="mb-8">
+            <ToDoList />
+          </div>
 
-            {/* Today's Appointments Section */}
-            <div className="mb-8">
-              <AppointmentsList />
-            </div>
+          <div className="mb-8">
+            <AppointmentsList />
+          </div>
 
-            {/* Financial Statistics */}
-            <div className="mt-8">
-              <h2 className="text-xl font-bold mb-4">Financial Statistics</h2>
-              <div className="h-[400px] w-full bg-white rounded-lg shadow-md overflow-hidden">
-                <FinancialChart data={data?.financialData} />
-              </div>
+          <div className="mt-8">
+            <h2 className="text-xl font-bold mb-4">Financial Statistics</h2>
+            <div className="h-[400px] w-full bg-white rounded-lg shadow-md overflow-hidden">
+              <FinancialChart data={data?.financialData} />
             </div>
+          </div>
 
-            {/* Activity Feed Section */}
-            <div className="mt-8 overflow-y-scroll" style={{ maxHeight: '75vh' }}>
-              <h2 className="text-xl font-bold mb-4">Activity Feed</h2>
-              <div className="w-full bg-white rounded-lg shadow-md p-4">
-                <ActivityFeed activities={data?.activityFeed} />
-              </div>
+          <div className="mt-8 overflow-y-scroll" style={{ maxHeight: '75vh' }}>
+            <h2 className="text-xl font-bold mb-4">Activity Feed</h2>
+            <div className="w-full bg-white rounded-lg shadow-md p-4">
+              <ActivityFeed activities={data?.activityFeed} />
             </div>
-          </main>
-        </div>
+          </div>
+        </main>
       </div>
-    </ProtectedRoute>
+    </div>
   );
 };
 
 export default HomePage;
+
 
 
 

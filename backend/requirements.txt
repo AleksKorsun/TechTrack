@@ -30,4 +30,9 @@ timezonefinder==6.5.2
 typing_extensions==4.12.2
 jose
 pydantic-settings
+pydantic==2.9.2
+fastapi-mail
+weasyprint
+stripe
+paypalrestsdk
 

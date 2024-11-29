@@ -1,24 +1,9 @@
-'use client';
+// app/hooks/useSession.ts
 
-import { useSession, signIn } from 'next-auth/react';
-import { useEffect } from 'react';
+import { useAuth } from '../authentication/context/AuthContext';
 
-export default function ProtectedPage() {
-  const { data: session, status } = useSession({
-    required: true,
-    onUnauthenticated() {
-      signIn();
-    },
-  });
+export const useSession = () => {
+  const { user, loading } = useAuth();
+  return { user, loading };
+};
 
-  if (status === 'loading') {
-    return <div>Загрузка...</div>;
-  }
-
-  return (
-    <div>
-      <h1>Добро пожаловать, {session?.user?.name}</h1>
-      {/* Контент защищённой страницы */}
-    </div>
-  );
-}

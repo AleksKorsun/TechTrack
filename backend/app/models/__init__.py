@@ -1,7 +1,8 @@
 from .ad import Ad
 from .client import Client
 from .estimate_item import EstimateItem
-from .chat import Conversation, Message
+from .conversation import Conversation  # Измените импорт на правильный файл
+from .message import Message  # Измените импорт на правильный файл
 from .estimate import Estimate
 from .expense import Expense
 from .finance import Payroll
@@ -18,6 +19,7 @@ from .service import Service
 from .user_device import UserDevice
 from .user import User
 from app.db.base_class import Base
+from .finance import Payroll, Income
 
 __all__ = [
     "Base",
@@ -33,6 +35,7 @@ __all__ = [
     "Estimate",
     "Expense",
     "Payroll",
+    "Income",
     "Integration",
     "Invoice",
     "InvoiceItem",

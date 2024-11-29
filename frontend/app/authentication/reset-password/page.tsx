@@ -11,7 +11,7 @@ export default function ResetPasswordPage() {
   const [message, setMessage] = useState('');
 
   if (!token) {
-    return <div>Недействительный или отсутствующий токен</div>;
+    return <div className="min-h-screen w-full flex items-center justify-center text-center">Недействительный или отсутствующий токен</div>;
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -25,19 +25,27 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <div className="..."> {/* Ваш дизайн */}
-      <h1>Сброс пароля</h1>
-      {message && <p>{message}</p>}
-      <form onSubmit={handleSubmit}>
-        <input
-          type="password"
-          placeholder="Введите новый пароль"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-          className="..."
-        />
-        <button type="submit">Сбросить пароль</button>
-      </form>
+    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-b from-appleBlue-dark to-appleBlue-light">
+      <div className="bg-opacity-50 bg-black p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h1 className="text-3xl font-bold text-appleGray mb-6 text-center">Сброс пароля</h1>
+        {message && <p className="text-red-500 text-center mb-4">{message}</p>}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="password"
+            placeholder="Введите новый пароль"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            className="w-full p-3 rounded-md bg-lightGray text-black focus:outline-none focus:ring-2 focus:ring-gold"
+          />
+          <button
+            type="submit"
+            className="w-full p-3 rounded-md bg-coral text-white font-bold hover:bg-opacity-90 transition"
+          >
+            Сбросить пароль
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
+

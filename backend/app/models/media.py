@@ -1,4 +1,5 @@
 # app/models/media.py
+
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from app.db.base_class import Base
@@ -21,10 +22,11 @@ class Media(Base):
     order_id = Column(Integer, ForeignKey('orders.id'), nullable=False)
     order = relationship('Order', back_populates='media_files')
 
-    # Добавьте новое поле
+    # Поле для связи с Report
     report_id = Column(Integer, ForeignKey('reports.id'), nullable=True)
 
-    # Добавьте связи
-    report_photos = relationship('Report', back_populates='photos', foreign_keys='Media.report_id')
-    report_videos = relationship('Report', back_populates='videos', foreign_keys='Media.report_id')
+    # Связи
+    report_photos = relationship('Report', back_populates='photos', foreign_keys=[report_id], overlaps="report_videos")
+    report_videos = relationship('Report', back_populates='videos', foreign_keys=[report_id], overlaps="report_photos", viewonly=True)
+
 

@@ -16,7 +16,7 @@ class ExpenseOut(ExpenseBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Схемы для Reports
 class ReportBase(BaseModel):
@@ -36,7 +36,7 @@ class ReportOut(ReportBase):
     expenses: List[ExpenseOut] = []
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Схема для пользователей (User)
 class UserOut(BaseModel):
@@ -47,7 +47,7 @@ class UserOut(BaseModel):
     role: UserRole
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Схемы для различных отчётов
 
@@ -59,7 +59,7 @@ class EmployeePerformanceOut(BaseModel):
     average_completion_time: float  # Время выполнения задач, в случае отсутствия - 0
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Financial Report
 class FinancialReportOut(BaseModel):
@@ -69,7 +69,7 @@ class FinancialReportOut(BaseModel):
     pending_orders: int             # Количество ожидающих заказов
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Workload Analysis Report
 class WorkloadReportOut(BaseModel):
@@ -79,7 +79,7 @@ class WorkloadReportOut(BaseModel):
     average_completion_time: float   # Среднее время выполнения задачи
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Client Statistics Report
 class ClientReportOut(BaseModel):
@@ -87,7 +87,7 @@ class ClientReportOut(BaseModel):
     count: int                      # Количество клиентов в категории
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Order Statistics Report
 class OrderReportOut(BaseModel):
@@ -98,7 +98,7 @@ class OrderReportOut(BaseModel):
     cancellation_rate: float        # Процент отмен заказов
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # KPI Report
 class KPIReportOut(BaseModel):
@@ -107,4 +107,4 @@ class KPIReportOut(BaseModel):
     conversion_rate: float          # Конверсия
 
     class Config:
-        orm_mode = True
+        from_attributes = True

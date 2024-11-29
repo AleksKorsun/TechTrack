@@ -12,8 +12,8 @@ conf = ConnectionConfig(
     MAIL_PORT=settings.MAIL_PORT,
     MAIL_SERVER=settings.MAIL_SERVER,
     MAIL_FROM_NAME=settings.MAIL_FROM_NAME,
-    MAIL_TLS=True,
-    MAIL_SSL=False,
+    MAIL_STARTTLS=True,      # Используем STARTTLS
+    MAIL_SSL_TLS=False,      # Если не используете SSL/TLS, установите False
     USE_CREDENTIALS=True,
     VALIDATE_CERTS=True
 )
@@ -27,4 +27,5 @@ async def send_receipt(email_to: EmailStr, subject: str, body: str):
     )
     fm = FastMail(conf)
     await fm.send_message(message)
+
 

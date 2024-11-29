@@ -6,7 +6,7 @@ import React, { useState, useEffect } from 'react';
 import ProtectedRoute from '../components/ProtectedRoute';
 import apiClient from '../utils/apiClient';
 import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
-import OrdersTable from '../components/OrdersTable';
+import OrdersTable from './components/OrdersTable';
 import { Order } from '../../types';
 
 const OrdersPage: React.FC = () => {

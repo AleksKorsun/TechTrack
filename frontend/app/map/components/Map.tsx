@@ -5,11 +5,11 @@ import React, { useEffect, useState, useMemo } from 'react';
 import MapGL, { Marker, Popup, ViewState, NavigationControl } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import Supercluster, { ClusterProperties } from 'supercluster'; // Импорт ClusterProperties
-import { Technician, Order } from '../../types';
+import { Technician, Order } from '../../../types';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchTechnicians } from '../store/techniciansSlice';
-import { fetchOrders } from '../store/ordersSlice';
-import { RootState, AppDispatch } from '../store/store';
+import { fetchTechnicians } from '../../store/techniciansSlice';
+import { fetchOrders } from '../../store/ordersSlice';
+import { RootState, AppDispatch } from '../../store/store';
 import TechnicianMarker from './TechnicianMarker';
 import OrderMarker from './OrderMarker';
 import io from 'socket.io-client';
@@ -91,7 +91,7 @@ const Map: React.FC = () => {
   }, [orderStatusFilter, technicianStatusFilter, startDateFilter, endDateFilter]);
 
   useEffect(() => {
-    const socket = io('http://localhost:8000'); // Замените на ваш адрес сервера
+    const socket = io(process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000');
 
     socket.on('technicianUpdate', (updatedTechnician: Technician) => {
       dispatch({

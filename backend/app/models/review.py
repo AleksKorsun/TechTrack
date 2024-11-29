@@ -1,3 +1,5 @@
+# models/review.py
+
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from app.db.base_class import Base
@@ -10,7 +12,7 @@ class Review(Base):
     order_id = Column(Integer, ForeignKey('orders.id'), nullable=False)
     technician_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     client_id = Column(Integer, ForeignKey('users.id'), nullable=False)
-    rating = Column(Integer, nullable=False)  # Оценка от 1 до 5
+    rating = Column(Integer, nullable=False)
     review_text = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
@@ -18,3 +20,4 @@ class Review(Base):
     technician = relationship('User', foreign_keys=[technician_id], back_populates='reviews_received')
     client = relationship('User', foreign_keys=[client_id], back_populates='reviews_given')
     order = relationship('Order', back_populates='review')
+

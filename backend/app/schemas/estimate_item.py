@@ -24,7 +24,6 @@ class EstimateItemUpdate(BaseModel):
 
 class EstimateItemOut(EstimateItemBase):
     id: int
-    total: float
 
     class Config:
-        orm_mode = True
+        from_attributes = True

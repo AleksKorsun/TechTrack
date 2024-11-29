@@ -1,14 +1,14 @@
-'use client';
+// app/authentication/error/page.tsx
 
 import React from 'react';
 
-const ForbiddenPage: React.FC = () => {
+const ErrorPage = () => {
   return (
-    <div>
-      <h1>Доступ запрещен</h1>
-      <p>У вас нет прав для просмотра этой страницы.</p>
+    <div style={{ textAlign: 'center', marginTop: '50px' }}>
+      <h1>Ошибка аутентификации</h1>
+      <p>Произошла ошибка при попытке входа в систему. Пожалуйста, попробуйте снова.</p>
     </div>
   );
 };
 
-export default ForbiddenPage;
+export default ErrorPage;

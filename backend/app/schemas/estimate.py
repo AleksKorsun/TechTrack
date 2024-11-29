@@ -28,4 +28,4 @@ class EstimateOut(EstimateBase):
     items: List[EstimateItemOut]
 
     class Config:
-        orm_mode = True
+        from_attributes = True

@@ -3,14 +3,25 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import apiClient from '../../utils/apiClient'; // Замените на правильный путь к apiClient
 import { Box, Typography, Grid, Paper } from '@mui/material';
 
+// Определим интерфейс для KPI данных
+interface KPIData {
+  avgRevenuePerEmployee: number;
+  clientRetention: number;
+  conversionRate: number;
+}
+
 const AnalyticsKPI = () => {
-  const [kpiData, setKpiData] = useState({});
+  const [kpiData, setKpiData] = useState<KPIData>({
+    avgRevenuePerEmployee: 0,
+    clientRetention: 0,
+    conversionRate: 0,
+  });
 
   useEffect(() => {
-    axios
+    apiClient
       .get('/api/reports/kpi')
       .then((response) => setKpiData(response.data))
       .catch((error) => console.error(error));
@@ -44,3 +55,4 @@ const AnalyticsKPI = () => {
 };
 
 export default AnalyticsKPI;
+

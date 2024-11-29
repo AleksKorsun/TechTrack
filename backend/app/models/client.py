@@ -20,4 +20,4 @@ class Client(Base):
     user = relationship('User', back_populates='client_profile')
     orders = relationship('Order', back_populates='client')
     payments = relationship('Payment', back_populates='client')
-
+    invoices = relationship('Invoice', back_populates='client')

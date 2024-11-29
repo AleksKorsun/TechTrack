@@ -3,33 +3,34 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { TextField, Button, Typography, Container } from '@mui/material';
-import apiClient from '../utils/apiClient';
+import { useAuth } from '../context/AuthContext';
+import apiClient from '../../utils/apiClient';
+import { User } from '../../../types';
+
 
 const SettingsPage = () => {
-  const { data: session } = useSession();
+  const { user, loading } = useAuth();
   const router = useRouter();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    // Добавьте другие поля, если необходимо
   });
 
   useEffect(() => {
-    if (!session) {
-      router.push('/login');
+    if (loading) return;
+    if (!user) {
+      router.push('/authentication/login');
     } else {
-      // Заполните форму данными пользователя из сессии
       setFormData({
-        name: session.user?.name || '',
-        email: session.user?.email || '',
-        phone: session.user?.phone || '',
+        name: user.name || '',
+        email: user.email || '',
+        phone: user.phone || '',
       });
     }
-  }, [session]);
+  }, [user, loading, router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -39,13 +40,20 @@ const SettingsPage = () => {
     e.preventDefault();
     try {
       await apiClient.put('/users/me', formData);
-      // Обновите сессию, если необходимо
       alert('Данные успешно обновлены');
     } catch (error: any) {
       console.error('Ошибка при обновлении данных:', error);
       alert(error.response?.data?.detail || 'Ошибка при обновлении данных');
     }
   };
+
+  if (loading) {
+    return <div>Загрузка...</div>;
+  }
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <Container maxWidth="sm" sx={{ mt: 4 }}>
@@ -68,7 +76,7 @@ const SettingsPage = () => {
           onChange={handleChange}
           fullWidth
           margin="normal"
-          disabled // Email обычно не разрешается изменять
+          disabled // Email обычно не изменяется
         />
         <TextField
           label="Телефон"
@@ -78,7 +86,6 @@ const SettingsPage = () => {
           fullWidth
           margin="normal"
         />
-        {/* Добавьте другие поля по необходимости */}
         <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
           Сохранить изменения
         </Button>
@@ -88,3 +95,4 @@ const SettingsPage = () => {
 };
 
 export default SettingsPage;
+

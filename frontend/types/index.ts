@@ -3,27 +3,52 @@
 export interface Technician {
   id: number;
   name: string;
-  status: 'available' | 'busy' | 'active';
-  latitude: number;
-  longitude: number;
-  // Добавьте другие необходимые поля при необходимости
+  status?: string;
+  latitude?: number;
+  longitude?: number;
+  // Другие необходимые поля
 }
+
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  phone?: string; // Добавлено свойство phone
+  // Добавьте другие необходимые свойства
+}
+
+export interface Event {
+  id: number;
+  title: string;
+  start: string | Date;
+  end: string | Date;
+  taskType?: string;
+  location?: string;
+  notes?: string;
+  technicianId?: number;
+  resourceId?: number;
+  // Другие поля по необходимости
+}
+
 
 
 export interface Order {
   id: number;
+  name: string; // Добавляем это свойство
   clientName: string;
   phone: string;
   status: 'new' | 'in_progress' | 'completed' | 'cancelled' | 'assigned';
   latitude: number;
   longitude: number;
-  startDate: string; // или preferred_start_time, в зависимости от бэкенда
+  startDate: string;
   amount: number;
   paymentStatus: 'Paid' | 'Overdue' | 'Pending';
   technicianId?: number;
   description?: string;
-  // Добавьте другие поля, которые возвращает бэкенд
+  // Другие поля, если есть
 }
+
 export interface Client {
   id: string;
   name: string;

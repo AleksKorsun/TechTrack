@@ -1,12 +1,24 @@
 // components/AddOrder.tsx
-'use client';
-
 import React, { useState } from 'react';
 import { Modal, Box, TextField, Button, MenuItem } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../store/store';
 import { addOrder } from '../store/ordersSlice';
-import { Order } from '../../types';  // Не забудьте импортировать тип Order
+import { Order } from '../../types';
+
+const statusOptions = {
+  new: 'New',
+  in_progress: 'In Progress',
+  completed: 'Completed',
+  cancelled: 'Cancelled',
+  assigned: 'Assigned'
+};
+
+const paymentStatusOptions = {
+  Pending: 'Pending',
+  Paid: 'Paid',
+  Overdue: 'Overdue'
+};
 
 const AddOrder = () => {
   const [open, setOpen] = useState(false);
@@ -15,9 +27,9 @@ const AddOrder = () => {
     clientName: '',
     phone: '',
     startDate: '',
-    status: 'Новый',
+    status: 'new',
     amount: 0,
-    paymentStatus: 'Ожидает оплаты', // Приводим к допустимому значению
+    paymentStatus: 'Pending',
   });
 
   const dispatch = useDispatch<AppDispatch>();
@@ -34,16 +46,16 @@ const AddOrder = () => {
   return (
     <div className="mb-4">
       <Button variant="contained" onClick={() => setOpen(true)}>
-        Создать новый заказ
+        Create New Order
       </Button>
       <Modal open={open} onClose={() => setOpen(false)}>
         <Box className="p-4 bg-white rounded" sx={{ margin: '100px auto', width: 400 }}>
-          <h2>Новый заказ</h2>
-          <TextField label="Название" name="name" fullWidth margin="normal" onChange={handleChange} />
-          <TextField label="Клиент" name="clientName" fullWidth margin="normal" onChange={handleChange} />
-          <TextField label="Телефон" name="phone" fullWidth margin="normal" onChange={handleChange} />
+          <h2>New Order</h2>
+          <TextField label="Order Name" name="name" fullWidth margin="normal" onChange={handleChange} />
+          <TextField label="Client" name="clientName" fullWidth margin="normal" onChange={handleChange} />
+          <TextField label="Phone" name="phone" fullWidth margin="normal" onChange={handleChange} />
           <TextField
-            label="Дата начала"
+            label="Start Date"
             name="startDate"
             type="date"
             fullWidth
@@ -52,7 +64,7 @@ const AddOrder = () => {
             InputLabelProps={{ shrink: true }}
           />
           <TextField
-            label="Статус"
+            label="Status"
             name="status"
             select
             fullWidth
@@ -60,12 +72,14 @@ const AddOrder = () => {
             value={orderData.status}
             onChange={handleChange}
           >
-            <MenuItem value="Новый">Новый</MenuItem>
-            <MenuItem value="В работе">В работе</MenuItem>
-            <MenuItem value="Завершен">Завершен</MenuItem>
+            {Object.entries(statusOptions).map(([value, label]) => (
+              <MenuItem key={value} value={value}>
+                {label}
+              </MenuItem>
+            ))}
           </TextField>
           <TextField
-            label="Сумма"
+            label="Amount"
             name="amount"
             type="number"
             fullWidth
@@ -73,7 +87,7 @@ const AddOrder = () => {
             onChange={handleChange}
           />
           <TextField
-            label="Статус оплаты"
+            label="Payment Status"
             name="paymentStatus"
             select
             fullWidth
@@ -81,12 +95,14 @@ const AddOrder = () => {
             value={orderData.paymentStatus}
             onChange={handleChange}
           >
-            <MenuItem value="Ожидает оплаты">Ожидает оплаты</MenuItem>
-            <MenuItem value="Оплачено">Оплачено</MenuItem>
-            <MenuItem value="Просрочено">Просрочено</MenuItem>
+            {Object.entries(paymentStatusOptions).map(([value, label]) => (
+              <MenuItem key={value} value={value}>
+                {label}
+              </MenuItem>
+            ))}
           </TextField>
           <Button variant="contained" onClick={handleSubmit} className="mt-4">
-            Сохранить
+            Save
           </Button>
         </Box>
       </Modal>
@@ -95,3 +111,5 @@ const AddOrder = () => {
 };
 
 export default AddOrder;
+
+

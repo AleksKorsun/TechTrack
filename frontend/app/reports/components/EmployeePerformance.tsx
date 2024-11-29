@@ -3,7 +3,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import apiClient from '../../utils/apiClient'; // Замените на корректный путь
 import {
   Box,
   Typography,
@@ -15,21 +15,36 @@ import {
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Line } from 'react-chartjs-2';
 
+// Определение типов для данных сотрудника
+interface EmployeePerformanceData {
+  task_id: number;
+  task_name: string;
+  status: string;
+  completion_time: string;
+  date: string;
+  average_completion_time: number;
+}
+
+interface Employee {
+  id: string;
+  name: string;
+}
+
 const EmployeePerformance = () => {
-  const [data, setData] = useState([]);
-  const [employees, setEmployees] = useState([]);
-  const [selectedEmployee, setSelectedEmployee] = useState('');
-  const [dateRange, setDateRange] = useState('last_month');
+  const [data, setData] = useState<EmployeePerformanceData[]>([]);
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [selectedEmployee, setSelectedEmployee] = useState<string>('');
+  const [dateRange, setDateRange] = useState<string>('last_month');
 
   useEffect(() => {
     // Получение списка сотрудников
-    axios
-      .get('/api/employees') // Эндпоинт для получения сотрудников
+    apiClient
+      .get('/api/employees')
       .then((response) => setEmployees(response.data))
       .catch((error) => console.error(error));
 
     // Получение данных производительности
-    axios
+    apiClient
       .get('/api/reports/employee-performance', {
         params: {
           employee_id: selectedEmployee,
@@ -57,12 +72,12 @@ const EmployeePerformance = () => {
             labelId="employee-label"
             value={selectedEmployee}
             label="Сотрудник"
-            onChange={(e) => setSelectedEmployee(e.target.value)}
+            onChange={(e) => setSelectedEmployee(e.target.value as string)}
           >
             <MenuItem value="">
               <em>Все</em>
             </MenuItem>
-            {employees.map((employee: any) => (
+            {employees.map((employee) => (
               <MenuItem key={employee.id} value={employee.id}>
                 {employee.name}
               </MenuItem>
@@ -75,7 +90,7 @@ const EmployeePerformance = () => {
             labelId="date-range-label"
             value={dateRange}
             label="Период"
-            onChange={(e) => setDateRange(e.target.value)}
+            onChange={(e) => setDateRange(e.target.value as string)}
           >
             <MenuItem value="last_week">Последняя неделя</MenuItem>
             <MenuItem value="last_month">Последний месяц</MenuItem>
@@ -84,17 +99,23 @@ const EmployeePerformance = () => {
         </FormControl>
       </Box>
       <Box sx={{ height: 400, mt: 2 }}>
-        <DataGrid rows={data} columns={columns} pageSize={5} />
+        <DataGrid
+          rows={data}
+          columns={columns}
+          paginationModel={{ pageSize: 5, page: 0 }}
+          pageSizeOptions={[5]}
+          disableRowSelectionOnClick
+        />
       </Box>
       <Box sx={{ mt: 4 }}>
         <Typography variant="h6">Среднее время выполнения задач</Typography>
         <Line
           data={{
-            labels: data.map((item: any) => item.date),
+            labels: data.map((item) => item.date),
             datasets: [
               {
                 label: 'Время выполнения (часы)',
-                data: data.map((item: any) => item.average_completion_time),
+                data: data.map((item) => item.average_completion_time),
                 fill: false,
                 backgroundColor: 'blue',
                 borderColor: 'blue',
@@ -108,3 +129,4 @@ const EmployeePerformance = () => {
 };
 
 export default EmployeePerformance;
+

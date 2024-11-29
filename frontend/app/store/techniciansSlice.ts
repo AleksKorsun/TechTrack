@@ -1,9 +1,8 @@
 // app/store/techniciansSlice.ts
 
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { getTechnicians } from '../services/technicianService';
+import apiClient from '../utils/apiClient';
 import { Technician } from '../../types';
-import axiosInstance from '../utils/axiosInstance';
 
 interface TechniciansState {
   technicians: Technician[];
@@ -17,15 +16,14 @@ const initialState: TechniciansState = {
   error: null,
 };
 
-// Обновление с использованием сервиса
+// Асинхронное действие для получения списка техников
 export const fetchTechnicians = createAsyncThunk<Technician[], any>(
   'technicians/fetchTechnicians',
   async (params = {}) => {
-    const response = await axiosInstance.get<Technician[]>('/technicians', { params });
+    const response = await apiClient.get<Technician[]>('/technicians', { params });
     return response.data;
   }
 );
-
 
 const techniciansSlice = createSlice({
   name: 'technicians',

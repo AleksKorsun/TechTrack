@@ -1,0 +1,41 @@
+//app/schedule/components/Calendar.css
+
+/* Calendar.css */
+
+.rbc-toolbar {
+  background-color: #f5f5f5;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rbc-toolbar .rbc-btn-group {
+  display: flex;
+  align-items: center;
+}
+
+.rbc-toolbar .MuiIconButton-root {
+  color: #333;
+}
+
+.rbc-toolbar .MuiButton-root {
+  margin-left: 8px;
+}
+
+.rbc-event {
+  background-color: #2196f3;
+  color: #fff;
+}
+
+.rbc-event-label {
+  display: none;
+}
+
+.rbc-day-slot .rbc-event-content {
+  white-space: normal;
+}
+
+/* Дополнительные стили для улучшения внешнего вида */
+
+

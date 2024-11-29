@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 from app.db.base_class import Base
 from datetime import datetime
 
+
 class Payroll(Base):
     __tablename__ = 'payrolls'
 

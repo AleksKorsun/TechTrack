@@ -1,4 +1,4 @@
-# schemas/user.py
+# app/schemas/user.py
 
 from pydantic import BaseModel, EmailStr, validator
 from typing import Optional
@@ -10,13 +10,12 @@ class UserBase(BaseModel):
     email: EmailStr
     name: str
     phone: Optional[str] = None
-    role: UserRole
 
 # Схема для создания нового пользователя
 class UserCreate(UserBase):
     password: str
 
-# Обновленная схема для изменения информации пользователя
+# Схема для обновления информации пользователя
 class UserUpdate(BaseModel):
     email: Optional[EmailStr] = None
     name: Optional[str] = None
@@ -36,11 +35,8 @@ class UserUpdate(BaseModel):
         return v
 
 # Схема для вывода информации о пользователе
-class UserOut(BaseModel):
+class UserOut(UserBase):
     id: int
-    email: EmailStr
-    name: str
-    phone: Optional[str] = None
     role: UserRole
     qualification: Optional[str] = None
     rating: Optional[int] = None
@@ -53,20 +49,8 @@ class UserOut(BaseModel):
     class Config:
         orm_mode = True
 
-# Схема для логина пользователя
-class UserLogin(BaseModel):
-    email: EmailStr
-    password: str
-
-# Схема для токена
-class Token(BaseModel):
-    access_token: str
-    refresh_token: str
-    token_type: str
-    user: UserOut
-
-# Схема для обновления токена
-class RefreshToken(BaseModel):
-    refresh_token: str
+# Схема для обновления роли пользователя
+class UserRoleUpdate(BaseModel):
+    role: UserRole
 
 

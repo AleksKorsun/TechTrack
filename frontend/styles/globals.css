@@ -49,3 +49,12 @@ body {
   margin: 0;
   color: #333;
 }
+
+/* Фиксируем футер внизу экрана */
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 10;
+}
+

@@ -3,15 +3,20 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import apiClient from '../../utils/apiClient'; // Замените на правильный путь к apiClient
 import { Box, Typography } from '@mui/material';
 import { Pie } from 'react-chartjs-2';
 
+interface ClientData {
+  client_category: string;
+  count: number;
+}
+
 const ClientReports = () => {
-  const [clientData, setClientData] = useState([]);
+  const [clientData, setClientData] = useState<ClientData[]>([]);
 
   useEffect(() => {
-    axios
+    apiClient
       .get('/api/reports/clients')
       .then((response) => setClientData(response.data))
       .catch((error) => console.error(error));
@@ -23,10 +28,10 @@ const ClientReports = () => {
       <Box sx={{ mt: 4 }}>
         <Pie
           data={{
-            labels: clientData.map((item: any) => item.client_category),
+            labels: clientData.map((item) => item.client_category),
             datasets: [
               {
-                data: clientData.map((item: any) => item.count),
+                data: clientData.map((item) => item.count),
                 backgroundColor: ['red', 'blue', 'green', 'yellow'],
               },
             ],
@@ -38,3 +43,4 @@ const ClientReports = () => {
 };
 
 export default ClientReports;
+

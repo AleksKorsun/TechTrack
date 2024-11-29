@@ -15,7 +15,7 @@ class MessageOut(BaseModel):
     sent_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class ConversationOut(BaseModel):
     id: int
@@ -23,4 +23,4 @@ class ConversationOut(BaseModel):
     created_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True

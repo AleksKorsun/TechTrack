@@ -18,19 +18,26 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="..."> {/* Ваш дизайн */}
-      <h1>Восстановление пароля</h1>
-      {message && <p>{message}</p>}
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Введите ваш email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="..."
-        />
-        <button type="submit">Отправить ссылку для восстановления</button>
-      </form>
+    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-b from-appleBlue-dark to-appleBlue-light">
+      <div className="bg-opacity-50 bg-black p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h1 className="text-3xl font-bold text-appleGray mb-6 text-center">Восстановление пароля</h1>
+        {message && <p className="text-red-500 text-center mb-4">{message}</p>}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="email"
+            placeholder="Введите ваш email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full p-3 rounded-md bg-lightGray text-black focus:outline-none focus:ring-2 focus:ring-gold"
+          />
+          <button
+            type="submit"
+            className="w-full p-3 rounded-md bg-coral text-white font-bold hover:bg-opacity-90 transition"
+          >
+            Отправить ссылку для восстановления
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

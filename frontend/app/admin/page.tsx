@@ -3,21 +3,34 @@
 'use client';
 
 import React from 'react';
-import ProtectedRoute from '../components/ProtectedRoute';
-import { useSession } from 'next-auth/react';
+import { useAuth } from '../authentication/context/AuthContext';
+import { useRouter } from 'next/navigation';
 
 const AdminPage = () => {
-  const { data: session } = useSession();
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  if (loading) {
+    return <div>Загрузка...</div>;
+  }
+
+  if (!user) {
+    router.push('/authentication/login');
+    return null;
+  }
+
+  if (user.role !== 'admin') {
+    return <div>Доступ запрещён</div>;
+  }
 
   return (
-    <ProtectedRoute allowedRoles={['admin']}>
-      <div>
-        <h1>Административная панель</h1>
-        <p>Добро пожаловать, {session?.user.name}!</p>
-        {/* Добавьте здесь компоненты для управления пользователями, заказами и т.д. */}
-      </div>
-    </ProtectedRoute>
+    <div>
+      <h1>Административная панель</h1>
+      <p>Добро пожаловать, {user.name}!</p>
+      {/* Добавьте здесь компоненты для управления пользователями, заказами и т.д. */}
+    </div>
   );
 };
 
 export default AdminPage;
+

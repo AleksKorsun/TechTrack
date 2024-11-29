@@ -28,21 +28,20 @@ MEDIA_STORAGE_PATH = "media_storage/"
 os.makedirs(MEDIA_STORAGE_PATH, exist_ok=True)
 
 # 1. Создание нового заказа
-@router.post("/", response_model=OrderOut, dependencies=[Depends(role_required([UserRole.client]))])
+@router.post("/", response_model=OrderOut, dependencies=[Depends(get_current_user)])
 async def create_order(
     order: OrderCreate,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     try:
-        # Получаем профиль клиента по текущему пользователю
-        client = db.query(Client).filter(Client.user_id == current_user.id).first()
-        if not client:
-            raise HTTPException(status_code=400, detail="Профиль клиента не найден")
-
+        # Проверяем, есть ли пользователь в базе данных
+        if not current_user:
+            raise HTTPException(status_code=400, detail="Пользователь не найден")
+        
         # Создаем новый заказ
         new_order = Order(
-            client_id=client.id,
+            client_id=current_user.id,  # Используем ID текущего пользователя
             service_type=order.service_type,
             description=order.description,
             address=order.address,
@@ -66,12 +65,13 @@ async def create_order(
                 total=item_data.quantity * item_data.unit_price
             )
             db.add(db_item)
-        
+
         db.commit()
         db.refresh(new_order)
         return new_order
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Не удалось создать заказ: {str(e)}")
+
 
 # 2.  Получение списка всех заказов (администратор и диспетчер)
 @router.get("/", response_model=List[OrderOut], dependencies=[Depends(role_required([UserRole.admin, UserRole.dispatcher]))])

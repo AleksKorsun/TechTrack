@@ -5,7 +5,7 @@
 import React from 'react';
 import { Menu, MenuItem, Divider } from '@mui/material';
 import { Logout } from '@mui/icons-material';
-import { signOut } from 'next-auth/react';
+import { useAuth } from '../authentication/context/AuthContext';
 
 interface AccountMenuProps {
   anchorEl: null | HTMLElement;
@@ -15,8 +15,10 @@ interface AccountMenuProps {
 }
 
 const AccountMenu: React.FC<AccountMenuProps> = ({ anchorEl, isOpen, onClose, userName }) => {
+  const { logout } = useAuth();
+
   const handleSignOut = () => {
-    signOut({ callbackUrl: '/login' });
+    logout();
     onClose();
   };
 
@@ -38,5 +40,6 @@ const AccountMenu: React.FC<AccountMenuProps> = ({ anchorEl, isOpen, onClose, us
 };
 
 export default AccountMenu;
+
 
 
